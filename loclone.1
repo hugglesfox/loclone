@@ -1,0 +1,48 @@
+.TH LOCLONE 1 2020-12-21
+
+.SH NAME
+loclone \- clone a mounted disk image
+.SH SYNOPSIS
+.B loclone
+.I SOURCE
+.I DEST
+
+.SH DESCRIPTION
+Creates a copy-on-write clone from the disk image
+.I SOURCE
+to
+.I DEST\fR,
+freezing the contained filesystem if mounted before doing so. Note
+.I DEST
+will be created if it doesn't already exist, however if
+.I DEST
+exists it will be silently overwritten.
+.PP
+.B loclone
+is primarily designed for snapshotting filesystem images which are mounted
+via a loopback device to paths such as
+.I /home
+where they cannot be easily unmounted. Note that the outer filesystem must
+support
+.B FICLONE
+and the inner filesystem (inside the image) must support
+.B FIFREEZE.
+
+.SH EXAMPLES
+To create an image
+.in +4m
+.nf
+.B $ truncate -s 500M img
+.B $ mkfs.ext4 img
+.in
+This image can then be mounted via a loopback device
+.in +4m
+.B $ mount img /mnt
+.in
+And finally cloned without needing to be unmounted
+.in +4m
+.B $ loclone img img.bak
+.in
+
+.SH SEE ALSO
+.BR ioctl_ficlone (2)

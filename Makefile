@@ -12,4 +12,5 @@ clean:
 
 .PHONY: install
 install:
-	cp loclone /usr/local/bin
+	install loclone /usr/local/bin
+	install loclone.1 /usr/local/share/man/man1
