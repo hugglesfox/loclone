@@ -1,8 +1,8 @@
 CFLAGS = -g
-DEPS = lo.h subvol.h
-OBJ = xfsub-snapshot.o lo.o subvol.o
+DEPS = lo.h img.h
+OBJ = loclone.o lo.o img.o
 
-xfsub-snapshot: $(OBJ)
+loclone: $(OBJ)
 
 %.o: %.c $(DEPS)
 
@@ -12,4 +12,4 @@ clean:
 
 .PHONY: install
 install:
-	cp xfsub-snapshot /usr/local/bin
+	cp loclone /usr/local/bin

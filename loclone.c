@@ -3,11 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "subvol.h"
+#include "img.h"
 
 int main(int argc, char *argv[])
 {
-	subvol_t subvol;
+	img_t img;
 	char *src, *dest;
 	int opt = 0, err;
 
@@ -28,38 +28,39 @@ int main(int argc, char *argv[])
 	src = argv[optind];
 	dest = argv[optind + 1];
 
-	if ((err = open_subvol(&subvol, src)) != 0) {
+	if ((err = img_open(&img, src)) != 0) {
 		if (err == -1) {
-			fprintf(stderr, "%s is not a file\n", src);
+			fprintf(stderr, "%s is not a imgle\n", src);
 		} else {
-			fprintf(stderr, "Error opening subvolume: %s\n", strerror(err));
+			fprintf(stderr, "Error opening imgume: %s\n", strerror(err));
 		}
 
 		exit(EXIT_FAILURE);
 	}
 
-	if ((err = freeze_subvol(&subvol)) != 0) {
+	if ((err = img_freeze(&img)) != 0) {
 		if (err == ENOENT) {
 			printf("%s is not mounted, not freezing\n", src);
 		} else {
-			fprintf(stderr, "Error freezing subvolume: %s\n", strerror(err));
+			fprintf(stderr, "Error freezing imgume: %s\n", strerror(err));
 			exit(EXIT_FAILURE);
 		}
 	}
 
-	if ((err = clone_subvol(&subvol, dest)) != 0) {
-		fprintf(stderr, "Error cloning subvolume: %s\n", strerror(err));
+	if ((err = img_clone(&img, dest)) != 0) {
+		fprintf(stderr, "Error cloning imgume: %s\n", strerror(err));
 		exit(EXIT_FAILURE);
 	}
 
-	if ((err = thaw_subvol(&subvol)) != 0) {
+	if ((err = img_thaw(&img)) != 0) {
 		if (err == ENOENT) {
 			printf("%s is not mounted, not thawing\n", src);
 		} else {
-			fprintf(stderr, "Error thawing subvolume: %s\n", strerror(err));
+			fprintf(stderr, "Error thawing imgume: %s\n", strerror(err));
 			exit(EXIT_FAILURE);
 		}
 	}
 
+	img_close(img);
 	exit(EXIT_SUCCESS);
 }

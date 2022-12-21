@@ -1,9 +1,9 @@
 #define _DEFAULT_SOURCE
 #define _POSIX_C_SOURCE 200809L
 
-#include "subvol.h"
+#include "img.h"
 
-int subvol_mount_point(subvol_t *subvol, char *mnt_path, size_t n)
+int img_mount_point(img_t *img, char *mnt_path, size_t n)
 {
 	int ret = ENOENT;
 
@@ -17,7 +17,7 @@ int subvol_mount_point(subvol_t *subvol, char *mnt_path, size_t n)
 			continue;
 		}
 
-		if (strcmp(lo_bf, subvol->path) == 0) {
+		if (strcmp(lo_bf, img->path) == 0) {
 			ret = lo_mount_point(lo, mnt_path, n);
 		}
 	}
@@ -26,7 +26,24 @@ int subvol_mount_point(subvol_t *subvol, char *mnt_path, size_t n)
 	return ret;
 }
 
-int open_subvol(subvol_t *subvol, const char *path) {
+int img_mount_fd(img_t *img)
+{
+	int ret, mnt_fd;
+	char mnt_path[PATH_MAX];
+
+	if ((ret = img_mount_point(img, mnt_path, sizeof(mnt_path))) != 0) {
+		errno = ret;
+		return -1;
+	}
+
+	if ((mnt_fd = open(mnt_path, O_RDONLY | O_DIRECTORY)) == -1) {
+		return -1;
+	}
+	
+	return mnt_fd;
+}
+
+int img_open(img_t *img, const char *path) {
 	struct stat sb;
 	char *abs_path;
 
@@ -39,38 +56,20 @@ int open_subvol(subvol_t *subvol, const char *path) {
 	if (!(abs_path = realpath(path, NULL)))
 		return errno;
 
-	subvol->path = abs_path;
-	subvol->fd = open(path, O_RDONLY);
+	img->path = abs_path;
+	img->fd = open(path, O_RDONLY);
 
-	if (subvol->fd == -1)
+	if (img->fd == -1)
 		return errno;
 
 	return 0;
 }
 
-
-int subvol_mount_fd(subvol_t *subvol)
-{
-	int ret, mnt_fd;
-	char mnt_path[PATH_MAX];
-
-	if ((ret = subvol_mount_point(subvol, mnt_path, sizeof(mnt_path))) != 0) {
-		errno = ret;
-		return -1;
-	}
-
-	if ((mnt_fd = open(mnt_path, O_RDONLY | O_DIRECTORY)) == -1) {
-		return -1;
-	}
-	
-	return mnt_fd;
-}
-
-int freeze_subvol(subvol_t *subvol)
+int img_freeze(img_t *img)
 {
 	int fd;
 
-	if ((fd = subvol_mount_fd(subvol)) == -1) {
+	if ((fd = img_mount_fd(img)) == -1) {
 		return errno;
 	}
 
@@ -81,11 +80,11 @@ int freeze_subvol(subvol_t *subvol)
 	return 0;
 }
 
-int thaw_subvol(subvol_t *subvol)
+int img_thaw(img_t *img)
 {
 	int fd;
 
-	if ((fd = subvol_mount_fd(subvol)) == -1) {
+	if ((fd = img_mount_fd(img)) == -1) {
 		return errno;
 	}
 
@@ -96,12 +95,12 @@ int thaw_subvol(subvol_t *subvol)
 	return 0;
 }
 
-int clone_subvol(subvol_t *subvol, char *dest)
+int img_clone(img_t *img, char *dest)
 {
 	struct stat sb;
 	int dest_fd;
 
-	if (stat(subvol->path, &sb) != 0)
+	if (stat(img->path, &sb) != 0)
 		return errno;
 
 	dest_fd = open(dest, O_WRONLY | O_CREAT | O_TRUNC, sb.st_mode);
@@ -109,14 +108,14 @@ int clone_subvol(subvol_t *subvol, char *dest)
 	if (dest_fd == -1)
 		return errno;
 
-	if (ioctl(dest_fd, FICLONE, subvol->fd) == -1)
+	if (ioctl(dest_fd, FICLONE, img->fd) == -1)
 		return errno;
 
 	return 0;
 }
 
-void close_subvol(subvol_t subvol)
+void img_close(img_t img)
 {
-	free(subvol.path);
-	close(subvol.fd);
+	free(img.path);
+	close(img.fd);
 }
