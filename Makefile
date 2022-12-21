@@ -10,3 +10,6 @@ xfsub-snapshot: $(OBJ)
 clean:
 	rm $(OBJ)
 
+.PHONY: install
+install:
+	cp xfsub-snapshot /usr/local/bin
