@@ -1,3 +1,10 @@
+#include <errno.h>
+#include <linux/limits.h>
+#include <mntent.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "lo.h"
 
 void lo_iter_init(struct lo_iter_ctx *ctx)

@@ -2,13 +2,7 @@
 #define LO_H
 
 #include <dirent.h>
-#include <errno.h>
-#include <linux/limits.h>
-#include <mntent.h>
 #include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define _SYS_BLOCK_PATH "/sys/block"
 #define _MTAB_PATH "/proc/mounts"

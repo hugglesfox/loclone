@@ -1,17 +1,6 @@
 #ifndef IMG_H
 #define IMG_H
 
-#include <errno.h>
-#include <fcntl.h>
-#include <linux/fs.h>
-#include <linux/limits.h>
-#include <stdlib.h>
-#include <sys/ioctl.h>
-#include <sys/stat.h>
-#include <unistd.h>
-
-#include "lo.h"
-
 typedef struct {
 	char *path;
 	int fd;

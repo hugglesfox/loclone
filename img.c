@@ -1,7 +1,18 @@
 #define _DEFAULT_SOURCE
 #define _POSIX_C_SOURCE 200809L
 
+#include <errno.h>
+#include <fcntl.h>
+#include <linux/fs.h>
+#include <linux/limits.h>
+#include <stdlib.h>
+#include <sys/ioctl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include "img.h"
+#include "lo.h"
+
 
 int img_mount_point(img_t *img, char *mnt_path, size_t n)
 {
