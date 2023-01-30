@@ -31,9 +31,9 @@ int main(int argc, char *argv[])
 
 	if ((err = img_open(&img, src)) != 0) {
 		if (err == -1) {
-			fprintf(stderr, "%s is not a imgle\n", src);
+			fprintf(stderr, "%s is not a valid image\n", src);
 		} else {
-			fprintf(stderr, "Error opening imgume: %s\n", strerror(err));
+			fprintf(stderr, "Error opening %s: %s\n", src, strerror(err));
 		}
 
 		exit(EXIT_FAILURE);
@@ -43,13 +43,13 @@ int main(int argc, char *argv[])
 		if (err == ENOENT) {
 			printf("%s is not mounted, not freezing\n", src);
 		} else {
-			fprintf(stderr, "Error freezing imgume: %s\n", strerror(err));
+			fprintf(stderr, "Error freezing %s: %s\n", src, strerror(err));
 			exit(EXIT_FAILURE);
 		}
 	}
 
 	if ((err = img_clone(&img, dest)) != 0) {
-		fprintf(stderr, "Error cloning imgume: %s\n", strerror(err));
+		fprintf(stderr, "Error cloning %s: %s\n", src, strerror(err));
 		exit(EXIT_FAILURE);
 	}
 
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 		if (err == ENOENT) {
 			printf("%s is not mounted, not thawing\n", src);
 		} else {
-			fprintf(stderr, "Error thawing imgume: %s\n", strerror(err));
+			fprintf(stderr, "Error thawing %s: %s\n", src, strerror(err));
 			exit(EXIT_FAILURE);
 		}
 	}
