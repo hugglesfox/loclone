@@ -51,3 +51,11 @@ The general architecture of the system is as follows:
   of the copy.
 
 The latter two points are what this tool encompasses.
+
+## Contributing
+
+Contributions (technical or not) are greatly appreciated. If you find any
+areas for improvement, please feel free to open a pull request.
+
+All contributions are subject to the Gnu Public Licence v3, the full text for
+which can be found in `LICENCE`.
