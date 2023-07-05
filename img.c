@@ -41,12 +41,12 @@ int img_mount_point(img_t *img, char *mnt_path, size_t n)
 	lo_iter_init(&ctx);
 
 	while (lo_iter_next(lo, sizeof(lo), &ctx) != -1) {
-		if (lo_backing_file(lo, lo_bf, sizeof(lo_bf)) != 0) {		
+		if (lo_backing_file(lo, lo_bf, sizeof(lo_bf)) != 0) {
 			continue;
 		}
 
 		if (strcmp(lo_bf, img->path) == 0) {
-			ret = lo_mount_point(lo, mnt_path, n);
+			ret = lo_mount_point(lo, mnt_path);
 		}
 	}
 
@@ -67,7 +67,7 @@ int img_mount_fd(img_t *img)
 	if ((mnt_fd = open(mnt_path, O_RDONLY | O_DIRECTORY)) == -1) {
 		return -1;
 	}
-	
+
 	return mnt_fd;
 }
 
@@ -77,7 +77,7 @@ int img_open(img_t *img, const char *path) {
 
 	if (stat(path, &sb) != 0)
 		return errno;
-	
+
 	if (!S_ISREG(sb.st_mode))
 		return -1;
 

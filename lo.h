@@ -35,16 +35,16 @@ int lo_iter_next(char *name, size_t n, struct lo_iter_ctx *ctx);
 void lo_iter_init(struct lo_iter_ctx *ctx);
 void lo_iter_destroy(struct lo_iter_ctx *ctx);
 
-/* 
+/*
  * Gets the path of the backing file for the loopback device of the given name.
  * Returns 0 on success and ENOENT if the device doesn't have a backing file
  */
 int lo_backing_file(const char *name, char *path, size_t n);
 
-/* 
+/*
  * Gets the mount point of the loopback device of the given name.
  * Returns 0 on success and ENOENT if the device doesn't have a backing file
  */
-int lo_mount_point(const char *name, char *mnt, size_t n);
+int lo_mount_point(const char *name, char *mnt);
 
 #endif  // LO_H

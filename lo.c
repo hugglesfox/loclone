@@ -85,14 +85,14 @@ int lo_backing_file(const char *restrict name, char *restrict path, size_t n)
 	return 0;
 }
 
-int lo_mount_point(const char *restrict name, char *restrict path, size_t n)
+int lo_mount_point(const char *restrict name, char *restrict path)
 {
 	int ret = ENOENT;
 
 	FILE *mounts;
 	struct mntent *mount;
 	char dev[PATH_MAX];
-	
+
 	snprintf(dev, sizeof(dev), "/dev/%s", name);
 	mounts = setmntent(_MTAB_PATH, "r");
 
@@ -100,7 +100,7 @@ int lo_mount_point(const char *restrict name, char *restrict path, size_t n)
 		return errno;
 
 	while ((mount = getmntent(mounts)) != NULL) {
-		if (strcmp(dev, mount->mnt_fsname) == 0) {		
+		if (strcmp(dev, mount->mnt_fsname) == 0) {
 			strcpy(path, mount->mnt_dir);
 			ret = 0;
 			break;
