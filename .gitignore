@@ -1,2 +1,23 @@
+# Automake
 *.o
 loclone
+Makefile.in
+Makefile
+
+# Autoconf
+autom4te.cache
+/.deps
+/autoscan.log
+/autoscan-*.log
+/aclocal.m4
+/compile
+/config.cache
+/config.guess
+/config.log
+/config.status
+/config.sub
+/configure
+/configure.scan
+/depcomp
+/install-sh
+/missing
