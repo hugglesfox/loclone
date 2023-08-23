@@ -12,9 +12,14 @@ For further details see **loclone**(1).
 
 ## Building
 
-**loclone** doesn't have any dependencies outside of the linux standard libraries.
+**loclone** doesn't have any dependencies outside of the linux kernel and GNU
+libc.
+
+**loclone** uses autotools as it's build system. After downloading the
+distribution tarball from the github releases, 
 
 ```bash
+$ ./configure
 $ make
 
 # Optionally to install to /usr/local
@@ -58,4 +63,4 @@ Contributions (technical or not) are greatly appreciated. If you find any
 areas for improvement, please feel free to open a pull request.
 
 All contributions are subject to the Gnu Public Licence v3, the full text for
-which can be found in `LICENCE`.
+which can be found in `COPYING`.
